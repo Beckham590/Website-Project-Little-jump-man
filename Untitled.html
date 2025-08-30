@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2022.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #000000; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Times; color: #000000; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">import { useState, useEffect } from "react";</span></p>
+<p class="p1"><span class="s1">import { motion } from "framer-motion";</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">export default function JumpCounterGame() {</span></p>
+<p class="p1"><span class="s1">const [localJumps, setLocalJumps] = useState(0);</span></p>
+<p class="p1"><span class="s1">const [globalJumps, setGlobalJumps] = useState(0);</span></p>
+<p class="p1"><span class="s1">const [jumpHeight, setJumpHeight] = useState(0);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">// Load global jumps from localStorage (simulating daily reset)</span></p>
+<p class="p1"><span class="s1">useEffect(() =&gt; {</span></p>
+<p class="p1"><span class="s1">const today = new Date().toDateString();</span></p>
+<p class="p1"><span class="s1">const storedData = JSON.parse(localStorage.getItem("jumpCounterData"));</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">if (storedData &amp;&amp; storedData.date === today) {</span></p>
+<p class="p1"><span class="s1">setGlobalJumps(storedData.global);</span></p>
+<p class="p1"><span class="s1">} else {</span></p>
+<p class="p1"><span class="s1">localStorage.setItem(</span></p>
+<p class="p1"><span class="s1">"jumpCounterData",</span></p>
+<p class="p1"><span class="s1">JSON.stringify({ date: today, global: 0 })</span></p>
+<p class="p1"><span class="s1">);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">}, []);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">const handleJump = () =&gt; {</span></p>
+<p class="p1"><span class="s1">const newLocal = localJumps + 1;</span></p>
+<p class="p1"><span class="s1">setLocalJumps(newLocal);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">const newGlobal = globalJumps + 1;</span></p>
+<p class="p1"><span class="s1">setGlobalJumps(newGlobal);</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">setJumpHeight(newLocal * 10); // progressively higher</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">// Save global count</span></p>
+<p class="p1"><span class="s1">const today = new Date().toDateString();</span></p>
+<p class="p1"><span class="s1">localStorage.setItem(</span></p>
+<p class="p1"><span class="s1">"jumpCounterData",</span></p>
+<p class="p1"><span class="s1">JSON.stringify({ date: today, global: newGlobal })</span></p>
+<p class="p1"><span class="s1">);</span></p>
+<p class="p1"><span class="s1">};</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">return (</span></p>
+<p class="p1"><span class="s1">&lt;div className="min-h-screen bg-black text-white flex flex-col items-center justify-between font-mono"&gt;</span></p>
+<p class="p1"><span class="s1">{/* Title */}</span></p>
+<p class="p1"><span class="s1">&lt;h1 className="text-6xl text-yellow-400 pixel-font mt-6"&gt;JUMP COUNTER&lt;/h1&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">{/* Jump button */}</span></p>
+<p class="p1"><span class="s1">&lt;button</span></p>
+<p class="p1"><span class="s1">onClick={handleJump}</span></p>
+<p class="p1"><span class="s1">className="bg-red-600 hover:bg-red-700 text-white text-4xl px-12 py-6 rounded-xl border-4 border-red-900 shadow-lg pixel-font"</span></p>
+<p class="p1"><span class="s1">&gt;</span></p>
+<p class="p1"><span class="s1">JUMP</span></p>
+<p class="p1"><span class="s1">&lt;/button&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">{/* Pixel Man */}</span></p>
+<p class="p1"><span class="s1">&lt;div className="relative w-full flex justify-center h-64 overflow-hidden"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;motion.div</span></p>
+<p class="p1"><span class="s1">animate={{ y: -jumpHeight }}</span></p>
+<p class="p1"><span class="s1">transition={{ type: "spring", stiffness: 200, damping: 10 }}</span></p>
+<p class="p1"><span class="s1">className="w-12 h-12 bg-green-500 pixel-man"</span></p>
+<p class="p1"><span class="s1">/&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">{/* Counters */}</span></p>
+<p class="p1"><span class="s1">&lt;div className="bg-gray-900 w-full py-4 flex justify-around text-lg border-t-4 border-yellow-400"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;p className="pixel-font"&gt;Your Jumps: {localJumps}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1">&lt;p className="pixel-font"&gt;Global Jumps Today: {globalJumps}&lt;/p&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;style jsx&gt;{`</span></p>
+<p class="p1"><span class="s1">.pixel-font {</span></p>
+<p class="p1"><span class="s1">font-family: 'Press Start 2P', cursive;</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">.pixel-man {</span></p>
+<p class="p1"><span class="s1">image-rendering: pixelated;</span></p>
+<p class="p1"><span class="s1">}</span></p>
+<p class="p1"><span class="s1">`}&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1">);</span></p>
+<p class="p1"><span class="s1">}</span></p>
+</body>
+</html>
